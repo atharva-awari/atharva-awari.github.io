@@ -196,10 +196,10 @@ footer a{color:var(--muted)}
     <div class="links">
       <a class="primary" href="assets/cv.pdf">Download CV</a>
       <a href="https://gitlab.com/Atharva05">GitLab</a>
+      <a href="https://scholar.google.com/citations?user=RZN9jL8AAAAJ&amp;hl=en">Google Scholar</a>
+      <a href="https://www.linkedin.com/in/atharva-awari">LinkedIn</a>
       <!-- Add when ready:
-      <a href="https://scholar.google.com/citations?user=XXXX">Google Scholar</a>
       <a href="https://orcid.org/0000-0000-0000-0000">ORCID</a>
-      <a href="https://www.linkedin.com/in/XXXX">LinkedIn</a>
       -->
     </div>
     <p class="addr">atharvaabhijit.awari&nbsp;at&nbsp;umons.ac.be<br>Department of Mathematics and Operational Research, Faculty of Engineering, University of Mons, Belgium</p>
@@ -253,7 +253,7 @@ footer a{color:var(--muted)}
         <p class="model math">min<sub><i>W</i>,<i>H</i></sub> <i>d</i>(<i>X</i>, <i>f</i>(<i>WH</i>))</p>
         <p>Splitting <span class="math"><i>T</i> = <i>WH</i></span> gives an ADMM scheme in which only one entrywise update depends on the nonlinearity <i>f</i> and the loss <i>d</i>. Four nonlinearities (ReLU, square, MinMax, modulus) and three losses (Frobenius, ℓ<sub>1</sub>, Kullback–Leibler) give twelve models, with missing data handled for free.</p>
         <p>Matching the loss to the noise matters: under Poisson noise, MinMax with the KL divergence recovers the image with 9.9% error, against 19.9% for the Frobenius norm. For ReLU-NMD the same framework beats coordinate descent and a tuned Adam baseline.</p>
-        <p class="refs">Under review, arXiv:2512.17473</p>
+        <p class="refs">Under review, <a href="https://arxiv.org/abs/2512.17473">arXiv:2512.17473</a></p>
       </div>
       <figure class="viz">
         <div class="strip two">
@@ -271,7 +271,7 @@ footer a{color:var(--muted)}
         <p class="model math">𝒳 ≈ <i>f</i>(⟦<i>A</i>, <i>B</i>, <i>C</i>⟧)</p>
         <p>The same splitting carries over to the canonical polyadic decomposition: a global ADMM scheme fits CPD under the Frobenius, ℓ<sub>1</sub> and KL losses, succeeds more often than AO-ADMM on synthetic tensors, and denoises the Indian Pines hyperspectral cube (307 × 307 × 162) under Poisson noise with 0.7% error.</p>
         <p>With a clipping nonlinearity, the model handles values censored at an instrument's limit of detection, as in NMR metabolomics, and recovers the underlying patterns more faithfully than treating those entries as missing or imputing them.</p>
-        <p class="refs">EUSIPCO 2026; ICASSP 2027 submission with SimulaMet</p>
+        <p class="refs">EUSIPCO 2026; <a href="https://arxiv.org/abs/2610.05339">arXiv:2610.05339</a> (ICASSP 2027 submission)</p>
       </div>
       <figure class="viz">
         <div class="strip">
@@ -295,14 +295,25 @@ footer a{color:var(--muted)}
       <h3>Under review</h3>
       <ul class="pubs">
         <li>
-          <span class="t">Nonlinear tensor decomposition for pattern discovery</span>
+          <span class="t"><a href="https://arxiv.org/abs/2610.05339">Nonlinear tensor decomposition for pattern discovery</a></span>
           <span class="a"><b>A. Awari</b>, G. R. van der Ploeg, A. Vandaele, N. Gillis, E. Acar</span>
-          <span class="v">Submitted to IEEE ICASSP 2027</span>
+          <span class="v">Submitted to IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP) 2027</span>
+          <div class="acts">
+            <a href="https://arxiv.org/abs/2610.05339">arXiv</a>
+            <a href="https://github.com/atharva-awari/ADMM-for-Nonlinear-CP">Code</a>
+            <details><summary>Cite</summary><pre>@article{awari2026nonlinearcp,
+  title   = {Nonlinear Tensor Decomposition for Pattern Discovery},
+  author  = {Awari, Atharva and van der Ploeg, G. R. and Vandaele, Arnaud and
+             Gillis, Nicolas and Acar, Evrim},
+  journal = {arXiv preprint arXiv:2610.05339},
+  year    = {2026}
+}</pre></details>
+          </div>
         </li>
         <li>
           <span class="t"><a href="https://arxiv.org/abs/2512.17473">Alternating direction method of multipliers for nonlinear matrix decompositions</a></span>
           <span class="a"><b>A. Awari</b>, N. Gillis, A. Vandaele</span>
-          <span class="v">Journal submission, 2025</span>
+          <span class="v">Submitted to IEEE Transactions on Signal Processing</span>
           <div class="acts">
             <a href="https://arxiv.org/abs/2512.17473">arXiv</a>
             <a href="https://gitlab.com/Atharva05/admm-for-nmd">Code</a>
@@ -322,10 +333,11 @@ footer a{color:var(--muted)}
       <h3>Conference papers</h3>
       <ul class="pubs">
         <li>
-          <span class="t">A simple and flexible ADMM-based framework for tensor decompositions</span>
+          <span class="t"><a href="https://www.researchgate.net/publication/405203491_A_Simple_and_Flexible_ADMM-Based_Framework_for_Tensor_Decompositions">A simple and flexible ADMM-based framework for tensor decompositions</a></span>
           <span class="a"><b>A. Awari</b>, S. Saha, N. Gillis, A. Vandaele</span>
           <span class="v">European Signal Processing Conference (EUSIPCO), 2026</span>
           <div class="acts">
+            <a href="https://www.researchgate.net/publication/405203491_A_Simple_and_Flexible_ADMM-Based_Framework_for_Tensor_Decompositions">Preprint</a>
             <a href="https://gitlab.com/Atharva05/admm-tensors">Code</a>
             <details><summary>Cite</summary><pre>@inproceedings{awari2026admmcpd,
   title     = {A Simple and Flexible {ADMM}-Based Framework
@@ -338,10 +350,11 @@ footer a{color:var(--muted)}
           </div>
         </li>
         <li>
-          <span class="t">Nonlinear matrix decomposition with the sigmoid function</span>
+          <span class="t"><a href="https://ieeexplore.ieee.org/document/11204338">Nonlinear matrix decomposition with the sigmoid function</a></span>
           <span class="a">H. Nguyen, <b>A. Awari</b>, A. Vandaele, N. Gillis</span>
           <span class="v">IEEE International Workshop on Machine Learning for Signal Processing (MLSP), Istanbul, 2025</span>
           <div class="acts">
+            <a href="https://ieeexplore.ieee.org/document/11204338">Paper</a>
             <a href="https://github.com/Harri-N/sigma-NMD">Code</a>
             <details><summary>Cite</summary><pre>@inproceedings{nguyen2025sigmoid,
   title     = {Nonlinear Matrix Decomposition with the Sigmoid Function},
@@ -354,10 +367,11 @@ footer a{color:var(--muted)}
           </div>
         </li>
         <li>
-          <span class="t">Coordinate descent algorithm for nonlinear matrix decomposition with the ReLU function</span>
+          <span class="t"><a href="https://ieeexplore.ieee.org/document/10715025">Coordinate descent algorithm for nonlinear matrix decomposition with the ReLU function</a></span>
           <span class="a"><b>A. Awari</b>, H. Nguyen, S. Wertz, A. Vandaele, N. Gillis</span>
           <span class="v">European Signal Processing Conference (EUSIPCO), 2024</span>
           <div class="acts">
+            <a href="https://ieeexplore.ieee.org/document/10715025">Paper</a>
             <a href="https://gitlab.com/Atharva05/coordinate-descent-for-relu-nmd">Code</a>
             <details><summary>Cite</summary><pre>@inproceedings{awari2024coordinate,
   title     = {Coordinate Descent Algorithm for Nonlinear Matrix
@@ -370,10 +384,11 @@ footer a{color:var(--muted)}
           </div>
         </li>
         <li>
-          <span class="t"><a href="https://arxiv.org/abs/2305.08687">Accelerated algorithms for nonlinear matrix decomposition with the ReLU function</a></span>
+          <span class="t"><a href="https://ieeexplore.ieee.org/document/10285984">Accelerated algorithms for nonlinear matrix decomposition with the ReLU function</a></span>
           <span class="a">G. Seraghiti, <b>A. Awari</b>, A. Vandaele, M. Porcelli, N. Gillis</span>
           <span class="v">IEEE International Workshop on Machine Learning for Signal Processing (MLSP), 2023</span>
           <div class="acts">
+            <a href="https://ieeexplore.ieee.org/document/10285984">Paper</a>
             <a href="https://arxiv.org/abs/2305.08687">arXiv</a>
             <a href="https://gitlab.com/ngillis/ReLU-NMD">Code</a>
             <details><summary>Cite</summary><pre>@inproceedings{seraghiti2023accelerated,
@@ -408,6 +423,8 @@ footer a{color:var(--muted)}
   <h2 id="h-soft">Software<small>Code for every paper, with the experiments</small></h2>
   <div class="body">
     <ul class="soft">
+      <li><a class="n" href="https://github.com/atharva-awari/ADMM-for-Nonlinear-CP">ADMM-for-Nonlinear-CP</a>
+        <p>ADMM for nonlinear CP decompositions, where an element-wise nonlinearity models clipped or censored data, such as values below a limit of detection in metabolomics or saturated audio recordings.</p></li>
       <li><a class="n" href="https://gitlab.com/Atharva05/admm-for-nmd">admm-for-nmd</a><span class="lang">MATLAB</span>
         <p>ADMM for twelve nonlinear matrix decompositions (ReLU, square, MinMax, modulus with Frobenius, ℓ<sub>1</sub> or KL), with missing data and an adaptive penalty.</p></li>
       <li><a class="n" href="https://gitlab.com/Atharva05/admm-tensors">admm-tensors</a><span class="lang">Python</span>
@@ -424,12 +441,16 @@ footer a{color:var(--muted)}
 
 <!-- ================= TALKS ================= -->
 <section class="sec" id="talks" aria-labelledby="h-talks">
-  <h2 id="h-talks">Talks</h2>
+  <h2 id="h-talks">Talks and conferences</h2>
   <div class="body">
     <ul class="list">
-      <li><span class="when">2026</span><div><span class="ttl">A simple and flexible ADMM-based framework for tensor decompositions</span><span class="meta">EUSIPCO 2026, Bruges, Belgium</span></div></li>
-      <li><span class="when">2026</span><div><span class="ttl">Beyond linear models: nonlinear matrix and tensor decompositions in data science</span><span class="meta">SimulaMet, Oslo</span></div></li>
-      <li><span class="when">2024</span><div><span class="ttl">Nonlinear matrix decomposition with the ReLU function</span><span class="meta">EURO Conference on Optimization (EUROPT 2024)</span></div></li>
+      <li><span class="when">2026</span><div><span class="ttl">European Signal Processing Conference (EUSIPCO)</span><span class="meta">Low-rank matrix and tensor decompositions session, Bruges, Belgium</span></div></li>
+      <li><span class="when">2025</span><div><span class="ttl">EUROPT Workshop on Advances in Continuous Optimization</span><span class="meta">Southampton, UK</span></div></li>
+      <li><span class="when">2025</span><div><span class="ttl">Biennial Numerical Analysis Conference</span><span class="meta">Glasgow, UK</span></div></li>
+      <li><span class="when">2024</span><div><span class="ttl">EUROPT Workshop on Advances in Continuous Optimization</span><span class="meta">Lund, Sweden</span></div></li>
+      <li><span class="when">2024</span><div><span class="ttl">SIAM Conference on Applied Linear Algebra</span><span class="meta">Paris, France</span></div></li>
+      <li><span class="when">2024</span><div><span class="ttl">Belgian Mathematical Optimization Workshop</span><span class="meta">La Roche-en-Ardenne, Belgium</span></div></li>
+      <li><span class="when">2023</span><div><span class="ttl">Foundations of Computational Mathematics (FoCM)</span><span class="meta">Paris, France</span></div></li>
     </ul>
   </div>
 </section>
@@ -442,9 +463,10 @@ footer a{color:var(--muted)}
       <li><time datetime="2027-01">Jan 2027</time><div><span class="cell up" aria-hidden="true"></span>Starting as a postdoctoral researcher in Evrim Acar's group at SimulaMet, Oslo.</div></li>
       <li><time datetime="2026-12-04">4 Dec 2026</time><div><span class="cell up" aria-hidden="true"></span>Public PhD defence at the University of Mons.</div></li>
       <li><time datetime="2026-10-29">29 Oct 2026</time><div><span class="cell" aria-hidden="true"></span>Passed my private PhD defence at the University of Mons.</div></li>
-      <li><time datetime="2026-10">Oct 2026</time><div><span class="cell" aria-hidden="true"></span><i>Nonlinear tensor decomposition for pattern discovery</i>, with SimulaMet, submitted to ICASSP 2027.</div></li>
+      <li><time datetime="2026-10">Oct 2026</time><div><span class="cell" aria-hidden="true"></span><i>Nonlinear tensor decomposition for pattern discovery</i>, with SimulaMet, submitted to ICASSP 2027 (<a href="https://arxiv.org/abs/2610.05339">arXiv</a>).</div></li>
       <li><time datetime="2026-09">Sep 2026</time><div><span class="cell" aria-hidden="true"></span>PhD thesis <i>Beyond Linearity: Nonlinear Matrix and Tensor Decompositions</i> submitted.</div></li>
       <li><time datetime="2026">2026</time><div><span class="cell" aria-hidden="true"></span>ADMM for tensor decompositions presented at EUSIPCO 2026 in Bruges.</div></li>
+      <li><time datetime="2026-03">Mar 2026</time><div><span class="cell" aria-hidden="true"></span>Visiting researcher in Evrim Acar's DataSci group at SimulaMet, Oslo, until June.</div></li>
       <li><time datetime="2025-12">Dec 2025</time><div><span class="cell" aria-hidden="true"></span>Preprint on ADMM for nonlinear matrix decompositions on <a href="https://arxiv.org/abs/2512.17473">arXiv</a>.</div></li>
     </ul>
   </div>
