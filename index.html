@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Atharva Awari: nonlinear matrix and tensor decompositions</title>
+<meta name="description" content="Atharva Awari, researcher in optimization and nonlinear matrix and tensor decompositions. PhD at the University of Mons; postdoc at SimulaMet from January 2027.">
+<meta property="og:title" content="Atharva Awari">
+<meta property="og:description" content="Nonlinear matrix and tensor decompositions, ADMM, and open-source software.">
+<link rel="preload" href="assets/fonts/stix-two-text-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+/* Self-hosted fonts: STIX Two Text and Public Sans (SIL Open Font License, see assets/fonts) */
+@font-face{font-family:"STIX Two Text";font-style:normal;font-weight:400;font-display:swap;src:url(assets/fonts/stix-two-text-latin-400-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"STIX Two Text";font-style:italic;font-weight:400;font-display:swap;src:url(assets/fonts/stix-two-text-latin-400-italic.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"STIX Two Text";font-style:normal;font-weight:500;font-display:swap;src:url(assets/fonts/stix-two-text-latin-500-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"STIX Two Text";font-style:normal;font-weight:600;font-display:swap;src:url(assets/fonts/stix-two-text-latin-600-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"STIX Two Text";font-style:normal;font-weight:400;font-display:swap;src:url(assets/fonts/stix-two-text-greek-400-normal.woff2) format("woff2");unicode-range:U+0370-03FF}
+@font-face{font-family:"STIX Two Text";font-style:italic;font-weight:400;font-display:swap;src:url(assets/fonts/stix-two-text-greek-400-italic.woff2) format("woff2");unicode-range:U+0370-03FF}
+@font-face{font-family:"STIX Two Text";font-style:normal;font-weight:500;font-display:swap;src:url(assets/fonts/stix-two-text-greek-500-normal.woff2) format("woff2");unicode-range:U+0370-03FF}
+@font-face{font-family:"STIX Two Text";font-style:normal;font-weight:600;font-display:swap;src:url(assets/fonts/stix-two-text-greek-600-normal.woff2) format("woff2");unicode-range:U+0370-03FF}
+@font-face{font-family:"Public Sans";font-style:normal;font-weight:400;font-display:swap;src:url(assets/fonts/public-sans-latin-400-normal.woff2) format("woff2")}
+@font-face{font-family:"Public Sans";font-style:normal;font-weight:500;font-display:swap;src:url(assets/fonts/public-sans-latin-500-normal.woff2) format("woff2")}
+@font-face{font-family:"Public Sans";font-style:normal;font-weight:600;font-display:swap;src:url(assets/fonts/public-sans-latin-600-normal.woff2) format("woff2")}
+:root{
+  --paper:#F3F5F7; --paper-2:#E9EDF1; --ink:#1C2433; --muted:#566070; --rule:#D3DAE2;
+  --pos:#0E7C74; --neg:#6B4FA0; --link:#0B6A63;
+  --serif:"STIX Two Text", "STIX Two Math", "Cambria Math", Cambria, Georgia, serif;
+  --sans:"Public Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --measure:40rem; --gutter:clamp(1.25rem, 4vw, 3rem);
+  color-scheme: light;
+}
+:root[data-theme="dark"]{
+  --paper:#141A24; --paper-2:#1B2330; --ink:#E4E8EE; --muted:#9AA5B5; --rule:#2C3646;
+  --pos:#4FC2B6; --neg:#A88EE3; --link:#6FD3C7; color-scheme: dark;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#141A24; --paper-2:#1B2330; --ink:#E4E8EE; --muted:#9AA5B5; --rule:#2C3646;
+    --pos:#4FC2B6; --neg:#A88EE3; --link:#6FD3C7; color-scheme: dark;
+  }
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth; scroll-padding-top:4.5rem}
+@media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} }
+body{margin:0; background:var(--paper); color:var(--ink); font-family:var(--serif);
+  font-size:1.125rem; line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility}
+a{color:var(--link); text-decoration-thickness:1px; text-underline-offset:.18em}
+a:hover{text-decoration-thickness:2px}
+:focus-visible{outline:2px solid var(--pos); outline-offset:3px; border-radius:2px}
+.skip{position:absolute; left:-999px; top:.5rem; background:var(--ink); color:var(--paper); padding:.5rem .75rem; font-family:var(--sans); font-size:.9rem; z-index:20}
+.skip:focus{left:.5rem}
+i.m, .math i{font-style:italic}
+.math{font-family:var(--serif); white-space:nowrap}
+
+/* ---------- top bar ---------- */
+.bar{position:sticky; top:0; z-index:10; background:color-mix(in srgb, var(--paper) 88%, transparent);
+  backdrop-filter:saturate(1.2) blur(8px); -webkit-backdrop-filter:saturate(1.2) blur(8px); border-bottom:1px solid transparent; transition:border-color .2s}
+.bar.scrolled{border-bottom-color:var(--rule)}
+.bar-in{max-width:72rem; margin:0 auto; padding:.7rem var(--gutter); display:flex; align-items:center; gap:1.5rem}
+.bar .home{font-family:var(--serif); font-weight:500; font-size:1.05rem; color:var(--ink); text-decoration:none; margin-right:auto}
+.bar nav{display:flex; gap:1.25rem; font-family:var(--sans); font-size:.875rem}
+.bar nav a{color:var(--muted); text-decoration:none}
+.bar nav a:hover,.bar nav a[aria-current="true"]{color:var(--ink)}
+.theme{font-family:var(--sans); font-size:.8rem; background:none; border:1px solid var(--rule); color:var(--muted);
+  border-radius:999px; padding:.3rem .7rem; cursor:pointer}
+.theme:hover{color:var(--ink); border-color:var(--muted)}
+@media (max-width:760px){ .bar nav{display:none} }
+
+/* ---------- hero ---------- */
+.hero{max-width:72rem; margin:0 auto; padding:clamp(2rem,6vw,4.5rem) var(--gutter) 2rem;
+  display:grid; grid-template-columns:minmax(0,5fr) minmax(0,7fr); gap:clamp(1.5rem,4vw,3.5rem); align-items:center}
+@media (max-width:900px){ .hero{grid-template-columns:1fr} }
+.who{display:flex; gap:1.1rem; align-items:center; margin-bottom:1.4rem}
+.portrait{width:5.5rem; height:5.5rem; border-radius:50%; flex:none; object-fit:cover; background:var(--paper-2);
+  display:grid; place-items:center; font-size:1.6rem; color:var(--muted); border:1px solid var(--rule)}
+h1{font-weight:500; font-size:clamp(2.1rem,3.6vw,2.75rem); line-height:1.05; letter-spacing:-.01em; margin:0}
+.role{font-size:1.05rem; color:var(--muted); margin:.35rem 0 0; line-height:1.4}
+.lede{font-size:1.2rem; line-height:1.55; margin:0 0 1rem; max-width:34rem}
+.hero p{max-width:34rem}
+.links{display:flex; flex-wrap:wrap; gap:.5rem; margin-top:1.4rem; font-family:var(--sans); font-size:.85rem}
+.links a{color:var(--ink); text-decoration:none; border:1px solid var(--rule); border-radius:999px; padding:.35rem .8rem; background:var(--paper)}
+.links a:hover{border-color:var(--ink)}
+.links a.primary{background:var(--ink); color:var(--paper); border-color:var(--ink)}
+.addr{font-size:.95rem; color:var(--muted); margin-top:1.1rem; line-height:1.45}
+
+.figure-live{margin:0; position:relative}
+.figure-live canvas{display:block; width:100%; height:auto; aspect-ratio: 7 / 5}
+.live-cap{display:flex; align-items:baseline; gap:1rem; margin-top:.4rem; min-height:3.2rem}
+.live-cap .eq{font-size:1.35rem; white-space:nowrap}
+.live-cap .what{font-size:.98rem; color:var(--muted); line-height:1.35}
+.live-cap .fade{transition:opacity .45s}
+sub,sup{line-height:0; font-size:.72em}
+.pause{margin-left:auto; align-self:center; flex:none; font-family:var(--sans); font-size:.75rem; color:var(--muted);
+  background:var(--paper); border:1px solid var(--rule); border-radius:999px; padding:.25rem .65rem; cursor:pointer}
+.pause:hover{color:var(--ink)}
+
+/* ---------- sections with margin titles ---------- */
+.sec{max-width:72rem; margin:0 auto; padding:clamp(2.5rem,6vw,4.5rem) var(--gutter) 0;
+  display:grid; grid-template-columns:12rem minmax(0,1fr); gap:clamp(1.5rem,4vw,3.5rem)}
+.sec > h2{font-weight:500; font-size:1.55rem; line-height:1.2; margin:0; position:sticky; top:4.5rem; align-self:start}
+.sec > h2 small{display:block; font-size:.92rem; color:var(--muted); font-weight:400; margin-top:.4rem; line-height:1.4}
+@media (max-width:900px){ .sec{grid-template-columns:1fr; gap:1rem} .sec > h2{position:static} }
+.body{max-width:46rem}
+.body > p{max-width:var(--measure)}
+
+/* research */
+.topic{display:grid; grid-template-columns:minmax(0,1fr) 16.5rem; gap:2rem; padding:0 0 3rem; align-items:start}
+.topic + .topic{padding-top:2.6rem; border-top:1px solid var(--rule)}
+@media (max-width:760px){ .topic{grid-template-columns:1fr} .viz{max-width:21rem} }
+.topic h3{font-weight:500; font-size:1.3rem; margin:0 0 .15rem; line-height:1.25}
+.topic .model{font-size:1.08rem; color:var(--muted); margin:0 0 .8rem}
+.topic p{margin:0 0 .8rem}
+.topic .refs{font-family:var(--sans); font-size:.82rem; color:var(--muted); margin-top:.9rem}
+.topic .refs a{color:var(--muted)}
+.viz{margin:0}
+.viz svg{display:block; width:100%; height:auto}
+.viz figcaption{font-size:.85rem; color:var(--muted); line-height:1.4; margin-top:.5rem}
+.strip{display:grid; grid-template-columns:repeat(3,1fr); gap:.35rem}
+.strip.two{grid-template-columns:1fr; gap:.6rem}
+.strip img{width:100%; height:auto; display:block; border-radius:2px}
+.strip span{display:block; font-family:var(--sans); font-size:.7rem; color:var(--muted); margin-top:.2rem}
+.wide-fig{grid-column:1 / -1; margin-top:.3rem}
+
+/* publications */
+.pubgroup{margin:0 0 2.2rem}
+.pubgroup h3{font-family:var(--sans); font-weight:500; font-size:.85rem; color:var(--muted); margin:0 0 .9rem; letter-spacing:.01em}
+.pubs{list-style:none; margin:0; padding:0}
+.pubs li{margin:0 0 1.35rem; max-width:44rem}
+.pubs .t{font-weight:600; font-size:1.06rem; line-height:1.35; display:block}
+.pubs .t a{color:var(--ink); text-decoration:none}
+.pubs .t a:hover{text-decoration:underline}
+.pubs .a{display:block; font-size:1rem; line-height:1.45}
+.pubs .a b{font-weight:600}
+.pubs .v{display:block; font-style:italic; color:var(--muted); font-size:1rem}
+.acts{display:flex; flex-wrap:wrap; gap:.4rem; margin-top:.35rem; font-family:var(--sans); font-size:.75rem; align-items:flex-start}
+.acts a,.acts summary{color:var(--muted); border:1px solid var(--rule); border-radius:4px; padding:.12rem .5rem; text-decoration:none; cursor:pointer; list-style:none}
+.acts a:hover,.acts summary:hover{color:var(--ink); border-color:var(--muted)}
+.acts summary::-webkit-details-marker{display:none}
+.acts details{display:contents}
+.acts details[open] summary{color:var(--ink); border-color:var(--ink)}
+.acts pre{flex-basis:100%; margin:.4rem 0 0; padding:.8rem 1rem; background:var(--paper-2); border-radius:4px; font-size:.78rem; line-height:1.5; overflow-x:auto; white-space:pre; font-family:ui-monospace, "SF Mono", Menlo, Consolas, monospace; color:var(--ink)}
+.tag{font-family:var(--sans); font-size:.72rem; font-style:normal; color:var(--pos); border:1px solid currentColor; border-radius:4px; padding:0 .35rem; margin-left:.35rem; vertical-align:.12em}
+
+/* software */
+.soft{list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(auto-fill,minmax(19rem,1fr)); gap:1.6rem 2rem}
+.soft li{max-width:24rem}
+.soft a.n{font-weight:600; color:var(--ink); text-decoration:none; font-size:1.06rem}
+.soft a.n:hover{text-decoration:underline}
+.soft .lang{font-family:var(--sans); font-size:.75rem; color:var(--muted); margin-left:.4rem}
+.soft p{margin:.2rem 0 0; font-size:1rem; line-height:1.5}
+
+/* talks & news */
+.list{list-style:none; margin:0; padding:0; max-width:44rem}
+.list li{display:grid; grid-template-columns:6.5rem minmax(0,1fr); gap:1rem; margin:0 0 1rem; line-height:1.45}
+.list time,.list .when{font-family:var(--sans); font-size:.8rem; color:var(--muted); padding-top:.25rem}
+.list .ttl{font-weight:600}
+.list .meta{display:block; color:var(--muted); font-size:1rem}
+@media (max-width:520px){ .list li{grid-template-columns:1fr; gap:0} }
+.cell{display:inline-block; width:.62em; height:.62em; background:var(--pos); margin-right:.45em; vertical-align:.05em; border-radius:1px}
+.cell.up{background:none; outline:1.5px solid var(--pos); outline-offset:-1.5px}
+
+footer{max-width:72rem; margin:4rem auto 0; padding:2rem var(--gutter) 3rem; border-top:1px solid var(--rule);
+  font-family:var(--sans); font-size:.8rem; color:var(--muted); display:flex; flex-wrap:wrap; gap:1rem; justify-content:space-between}
+footer a{color:var(--muted)}
+</style>
+</head>
+<body>
+<a class="skip" href="#research">Skip to content</a>
+
+<header class="bar" id="bar">
+  <div class="bar-in">
+    <a class="home" href="#top">Atharva Awari</a>
+    <nav aria-label="Sections">
+      <a href="#research">Research</a>
+      <a href="#publications">Publications</a>
+      <a href="#software">Software</a>
+      <a href="#talks">Talks</a>
+      <a href="#news">News</a>
+    </nav>
+    <button class="theme" id="themeBtn" type="button" aria-label="Switch colour theme">Dark</button>
+  </div>
+</header>
+
+<main id="top">
+<section class="hero" aria-labelledby="name">
+  <div>
+    <div class="who">
+      <!-- Replace this block with: <img class="portrait" src="assets/img/photo.jpg" alt="Atharva Awari"> -->
+      <div class="portrait" aria-hidden="true">AA</div>
+      <div>
+        <h1 id="name">Atharva Awari</h1>
+        <p class="role">PhD researcher, University of Mons<br>Postdoc at SimulaMet, Oslo, from 2027</p>
+      </div>
+    </div>
+    <p class="lede">I design optimization algorithms for low-rank models that go beyond linearity.</p>
+    <p>Classical factorizations write data as <span class="math"><i>X</i> ≈ <i>WH</i></span>. My work studies the nonlinear version <span class="math"><i>X</i> ≈ <i>f</i>(<i>WH</i>)</span>, and its tensor counterpart, which describes sparse, binary, bounded or clipped data with far fewer factors. I build these models into a single ADMM framework and release the code openly.</p>
+    <div class="links">
+      <a class="primary" href="assets/cv.pdf">Download CV</a>
+      <a href="https://gitlab.com/Atharva05">GitLab</a>
+      <!-- Add when ready:
+      <a href="https://scholar.google.com/citations?user=XXXX">Google Scholar</a>
+      <a href="https://orcid.org/0000-0000-0000-0000">ORCID</a>
+      <a href="https://www.linkedin.com/in/XXXX">LinkedIn</a>
+      -->
+    </div>
+    <p class="addr">atharvaabhijit.awari&nbsp;at&nbsp;umons.ac.be<br>Department of Mathematics and Operational Research, Faculty of Engineering, University of Mons, Belgium</p>
+  </div>
+
+  <figure class="figure-live" aria-label="Animation of a nonlinear matrix decomposition turning into a nonlinear tensor decomposition">
+    <canvas id="hero" width="700" height="500" role="img" aria-label="Factor matrices W and H multiply, pass through a nonlinearity f, and produce the data matrix X; the matrix then extends into a third-order tensor built from factors A, B and C."></canvas>
+    <figcaption class="live-cap">
+      <span class="eq fade" id="capEq"></span>
+      <span class="what fade" id="capWhat"></span>
+      <button class="pause" id="pauseBtn" type="button">Pause</button>
+    </figcaption>
+  </figure>
+</section>
+
+<!-- ================= RESEARCH ================= -->
+<section class="sec" id="research" aria-labelledby="h-research">
+  <h2 id="h-research">Research<small>From my thesis, <i>Beyond Linearity: Nonlinear Matrix and Tensor Decompositions</i></small></h2>
+  <div class="body">
+
+    <article class="topic">
+      <div>
+        <h3>Sparse data and the ReLU</h3>
+        <p class="model math"><i>X</i> ≈ max(0, <i>WH</i>)</p>
+        <p>A sparse matrix can have high rank and still be the ReLU of a matrix of very low rank: the zeros only ask for nonpositive entries, and that freedom lowers the rank. The identity matrix of any size is the ReLU of a rank-3 matrix.</p>
+        <p>On a dictionary of sparse face features, a rank-20 ReLU decomposition reaches 3% error where the best linear rank-20 approximation stays at 78%. I developed accelerated algorithms for this model (A-NMD, 3B-NMD) and the first coordinate descent method that solves the original problem directly.</p>
+        <p class="refs">MLSP 2023, EUSIPCO 2024</p>
+      </div>
+      <figure class="viz">
+        <svg id="vizRelu" viewBox="0 0 240 120" role="img" aria-label="A rank-3 matrix with positive diagonal and negative off-diagonal entries; its ReLU is the identity matrix."></svg>
+        <figcaption>A rank-3 matrix (teal positive, violet negative) whose ReLU is the full-rank identity.</figcaption>
+      </figure>
+    </article>
+
+    <article class="topic">
+      <div>
+        <h3>Binary and bounded data</h3>
+        <p class="model math"><i>X</i> ≈ σ(<i>WH</i>)</p>
+        <p>With the sigmoid, the model fits data with entries in [0, 1] or of a binary nature, such as presence/absence patterns, ratings or adjacency matrices. A block coordinate descent method with a scaling step and a TSVD-based initialization compresses binary data sets and completes missing entries better than the truncated SVD and ReLU-NMD.</p>
+        <p class="refs">MLSP 2025, with H. Nguyen</p>
+      </div>
+      <figure class="viz">
+        <svg id="vizSig" viewBox="0 0 240 120" role="img" aria-label="A binary matrix and its rank-2 sigmoid approximation, which looks almost identical."></svg>
+        <figcaption>A binary matrix (left) and a rank-2 approximation σ(<i>WH</i>) (right).</figcaption>
+      </figure>
+    </article>
+
+    <article class="topic">
+      <div>
+        <h3>One algorithm for many models</h3>
+        <p class="model math">min<sub><i>W</i>,<i>H</i></sub> <i>d</i>(<i>X</i>, <i>f</i>(<i>WH</i>))</p>
+        <p>Splitting <span class="math"><i>T</i> = <i>WH</i></span> gives an ADMM scheme in which only one entrywise update depends on the nonlinearity <i>f</i> and the loss <i>d</i>. Four nonlinearities (ReLU, square, MinMax, modulus) and three losses (Frobenius, ℓ<sub>1</sub>, Kullback–Leibler) give twelve models, with missing data handled for free.</p>
+        <p>Matching the loss to the noise matters: under Poisson noise, MinMax with the KL divergence recovers the image with 9.9% error, against 19.9% for the Frobenius norm. For ReLU-NMD the same framework beats coordinate descent and a tuned Adam baseline.</p>
+        <p class="refs">Under review, arXiv:2512.17473</p>
+      </div>
+      <figure class="viz">
+        <div class="strip two">
+          <div><img src="assets/img/mit-noisy.webp" alt="MIT logo corrupted by Poisson noise" width="700" height="364" loading="lazy"><span>Poisson noise</span></div>
+          <div><img src="assets/img/mit-minmaxkl.webp" alt="Rank-4 reconstruction with MinMax and KL divergence, noise removed" width="700" height="364" loading="lazy"><span>MinMax + KL, rank 4</span></div>
+        </div>
+        <svg id="vizConv" viewBox="0 0 240 120" role="img" aria-label="Relative error versus time on MNIST: ADMM drops below 0.3 within half a second and ends at 0.19; coordinate descent stays near 0.98 for over a second and ends at 0.26." style="margin-top:1rem"></svg>
+        <figcaption>ReLU-NMD on MNIST, relative error over 10 seconds.</figcaption>
+      </figure>
+    </article>
+
+    <article class="topic">
+      <div>
+        <h3>From matrices to tensors</h3>
+        <p class="model math">𝒳 ≈ <i>f</i>(⟦<i>A</i>, <i>B</i>, <i>C</i>⟧)</p>
+        <p>The same splitting carries over to the canonical polyadic decomposition: a global ADMM scheme fits CPD under the Frobenius, ℓ<sub>1</sub> and KL losses, succeeds more often than AO-ADMM on synthetic tensors, and denoises the Indian Pines hyperspectral cube (307 × 307 × 162) under Poisson noise with 0.7% error.</p>
+        <p>With a clipping nonlinearity, the model handles values censored at an instrument's limit of detection, as in NMR metabolomics, and recovers the underlying patterns more faithfully than treating those entries as missing or imputing them.</p>
+        <p class="refs">EUSIPCO 2026; ICASSP 2027 submission with SimulaMet</p>
+      </div>
+      <figure class="viz">
+        <div class="strip">
+          <div><img src="assets/img/pines-clean.webp" alt="Indian Pines, band 20, clean" width="520" height="520" loading="lazy"><span>Clean</span></div>
+          <div><img src="assets/img/pines-noisy.webp" alt="Indian Pines, band 20, with Poisson noise" width="520" height="520" loading="lazy"><span>Poisson noise</span></div>
+          <div><img src="assets/img/pines-admm.webp" alt="Indian Pines, band 20, reconstructed by ADMM with KL divergence" width="520" height="520" loading="lazy"><span>ADMM + KL</span></div>
+        </div>
+        <svg id="vizCens" viewBox="0 0 240 100" role="img" aria-label="Illustration of a spectrum whose low values are censored at a limit of detection." style="margin-top:1rem"></svg>
+        <figcaption>Hyperspectral denoising (band 20) and, below, a schematic spectrum censored at a detection limit.</figcaption>
+      </figure>
+    </article>
+  </div>
+</section>
+
+<!-- ================= PUBLICATIONS ================= -->
+<section class="sec" id="publications" aria-labelledby="h-pubs">
+  <h2 id="h-pubs">Publications</h2>
+  <div class="body">
+
+    <div class="pubgroup">
+      <h3>Under review</h3>
+      <ul class="pubs">
+        <li>
+          <span class="t">Nonlinear tensor decomposition for pattern discovery</span>
+          <span class="a"><b>A. Awari</b>, G. R. van der Ploeg, A. Vandaele, N. Gillis, E. Acar</span>
+          <span class="v">Submitted to IEEE ICASSP 2027</span>
+        </li>
+        <li>
+          <span class="t"><a href="https://arxiv.org/abs/2512.17473">Alternating direction method of multipliers for nonlinear matrix decompositions</a></span>
+          <span class="a"><b>A. Awari</b>, N. Gillis, A. Vandaele</span>
+          <span class="v">Journal submission, 2025</span>
+          <div class="acts">
+            <a href="https://arxiv.org/abs/2512.17473">arXiv</a>
+            <a href="https://gitlab.com/Atharva05/admm-for-nmd">Code</a>
+            <details><summary>Cite</summary><pre>@article{awari2025admm,
+  title   = {Alternating Direction Method of Multipliers for
+             Nonlinear Matrix Decompositions},
+  author  = {Awari, Atharva and Gillis, Nicolas and Vandaele, Arnaud},
+  journal = {arXiv preprint arXiv:2512.17473},
+  year    = {2025}
+}</pre></details>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="pubgroup">
+      <h3>Conference papers</h3>
+      <ul class="pubs">
+        <li>
+          <span class="t">A simple and flexible ADMM-based framework for tensor decompositions</span>
+          <span class="a"><b>A. Awari</b>, S. Saha, N. Gillis, A. Vandaele</span>
+          <span class="v">European Signal Processing Conference (EUSIPCO), 2026</span>
+          <div class="acts">
+            <a href="https://gitlab.com/Atharva05/admm-tensors">Code</a>
+            <details><summary>Cite</summary><pre>@inproceedings{awari2026admmcpd,
+  title     = {A Simple and Flexible {ADMM}-Based Framework
+               for Tensor Decompositions},
+  author    = {Awari, Atharva and Saha, Subhayan and
+               Gillis, Nicolas and Vandaele, Arnaud},
+  booktitle = {European Signal Processing Conference (EUSIPCO)},
+  year      = {2026}
+}</pre></details>
+          </div>
+        </li>
+        <li>
+          <span class="t">Nonlinear matrix decomposition with the sigmoid function</span>
+          <span class="a">H. Nguyen, <b>A. Awari</b>, A. Vandaele, N. Gillis</span>
+          <span class="v">IEEE International Workshop on Machine Learning for Signal Processing (MLSP), Istanbul, 2025</span>
+          <div class="acts">
+            <a href="https://github.com/Harri-N/sigma-NMD">Code</a>
+            <details><summary>Cite</summary><pre>@inproceedings{nguyen2025sigmoid,
+  title     = {Nonlinear Matrix Decomposition with the Sigmoid Function},
+  author    = {Nguyen, Harrison and Awari, Atharva and
+               Vandaele, Arnaud and Gillis, Nicolas},
+  booktitle = {IEEE International Workshop on Machine Learning
+               for Signal Processing (MLSP)},
+  year      = {2025}
+}</pre></details>
+          </div>
+        </li>
+        <li>
+          <span class="t">Coordinate descent algorithm for nonlinear matrix decomposition with the ReLU function</span>
+          <span class="a"><b>A. Awari</b>, H. Nguyen, S. Wertz, A. Vandaele, N. Gillis</span>
+          <span class="v">European Signal Processing Conference (EUSIPCO), 2024</span>
+          <div class="acts">
+            <a href="https://gitlab.com/Atharva05/coordinate-descent-for-relu-nmd">Code</a>
+            <details><summary>Cite</summary><pre>@inproceedings{awari2024coordinate,
+  title     = {Coordinate Descent Algorithm for Nonlinear Matrix
+               Decomposition with the {ReLU} Function},
+  author    = {Awari, Atharva and Nguyen, Harrison and Wertz, Samuel and
+               Vandaele, Arnaud and Gillis, Nicolas},
+  booktitle = {European Signal Processing Conference (EUSIPCO)},
+  year      = {2024}
+}</pre></details>
+          </div>
+        </li>
+        <li>
+          <span class="t"><a href="https://arxiv.org/abs/2305.08687">Accelerated algorithms for nonlinear matrix decomposition with the ReLU function</a></span>
+          <span class="a">G. Seraghiti, <b>A. Awari</b>, A. Vandaele, M. Porcelli, N. Gillis</span>
+          <span class="v">IEEE International Workshop on Machine Learning for Signal Processing (MLSP), 2023</span>
+          <div class="acts">
+            <a href="https://arxiv.org/abs/2305.08687">arXiv</a>
+            <a href="https://gitlab.com/ngillis/ReLU-NMD">Code</a>
+            <details><summary>Cite</summary><pre>@inproceedings{seraghiti2023accelerated,
+  title     = {Accelerated Algorithms for Nonlinear Matrix Decomposition
+               with the {ReLU} Function},
+  author    = {Seraghiti, Giovanni and Awari, Atharva and Vandaele, Arnaud and
+               Porcelli, Margherita and Gillis, Nicolas},
+  booktitle = {IEEE International Workshop on Machine Learning
+               for Signal Processing (MLSP)},
+  year      = {2023}
+}</pre></details>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="pubgroup">
+      <h3>Thesis</h3>
+      <ul class="pubs">
+        <li>
+          <span class="t">Beyond linearity: nonlinear matrix and tensor decompositions</span>
+          <span class="a"><b>A. Awari</b>, supervised by N. Gillis and A. Vandaele</span>
+          <span class="v">PhD thesis, University of Mons, 2026</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SOFTWARE ================= -->
+<section class="sec" id="software" aria-labelledby="h-soft">
+  <h2 id="h-soft">Software<small>Code for every paper, with the experiments</small></h2>
+  <div class="body">
+    <ul class="soft">
+      <li><a class="n" href="https://gitlab.com/Atharva05/admm-for-nmd">admm-for-nmd</a><span class="lang">MATLAB</span>
+        <p>ADMM for twelve nonlinear matrix decompositions (ReLU, square, MinMax, modulus with Frobenius, ℓ<sub>1</sub> or KL), with missing data and an adaptive penalty.</p></li>
+      <li><a class="n" href="https://gitlab.com/Atharva05/admm-tensors">admm-tensors</a><span class="lang">Python</span>
+        <p>Global ADMM for the canonical polyadic decomposition under Frobenius, ℓ<sub>1</sub> and KL losses, with the AO-ADMM comparison.</p></li>
+      <li><a class="n" href="https://gitlab.com/Atharva05/coordinate-descent-for-relu-nmd">coordinate-descent-for-relu-nmd</a><span class="lang">MATLAB, Julia, C++</span>
+        <p>Exact coordinate descent for ReLU-NMD, solving each scalar subproblem by sweeping its breakpoints; multithreaded.</p></li>
+      <li><a class="n" href="https://gitlab.com/ngillis/ReLU-NMD">ReLU-NMD</a><span class="lang">MATLAB</span>
+        <p>A-NMD and 3B-NMD with nuclear-norm initialization, with N. Gillis and G. Seraghiti.</p></li>
+      <li><a class="n" href="https://github.com/Harri-N/sigma-NMD">sigma-NMD</a><span class="lang">Python</span>
+        <p>Block coordinate descent for the sigmoid decomposition, with H. Nguyen.</p></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ================= TALKS ================= -->
+<section class="sec" id="talks" aria-labelledby="h-talks">
+  <h2 id="h-talks">Talks</h2>
+  <div class="body">
+    <ul class="list">
+      <li><span class="when">2026</span><div><span class="ttl">A simple and flexible ADMM-based framework for tensor decompositions</span><span class="meta">EUSIPCO 2026, Bruges, Belgium</span></div></li>
+      <li><span class="when">2026</span><div><span class="ttl">Beyond linear models: nonlinear matrix and tensor decompositions in data science</span><span class="meta">SimulaMet, Oslo</span></div></li>
+      <li><span class="when">2024</span><div><span class="ttl">Nonlinear matrix decomposition with the ReLU function</span><span class="meta">EURO Conference on Optimization (EUROPT 2024)</span></div></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ================= NEWS ================= -->
+<section class="sec" id="news" aria-labelledby="h-news">
+  <h2 id="h-news">News</h2>
+  <div class="body">
+    <ul class="list">
+      <li><time datetime="2027-01">Jan 2027</time><div><span class="cell up" aria-hidden="true"></span>Starting as a postdoctoral researcher in Evrim Acar's group at SimulaMet, Oslo.</div></li>
+      <li><time datetime="2026-12-04">4 Dec 2026</time><div><span class="cell up" aria-hidden="true"></span>Public PhD defence at the University of Mons.</div></li>
+      <li><time datetime="2026-10-29">29 Oct 2026</time><div><span class="cell" aria-hidden="true"></span>Passed my private PhD defence at the University of Mons.</div></li>
+      <li><time datetime="2026-10">Oct 2026</time><div><span class="cell" aria-hidden="true"></span><i>Nonlinear tensor decomposition for pattern discovery</i>, with SimulaMet, submitted to ICASSP 2027.</div></li>
+      <li><time datetime="2026-09">Sep 2026</time><div><span class="cell" aria-hidden="true"></span>PhD thesis <i>Beyond Linearity: Nonlinear Matrix and Tensor Decompositions</i> submitted.</div></li>
+      <li><time datetime="2026">2026</time><div><span class="cell" aria-hidden="true"></span>ADMM for tensor decompositions presented at EUSIPCO 2026 in Bruges.</div></li>
+      <li><time datetime="2025-12">Dec 2025</time><div><span class="cell" aria-hidden="true"></span>Preprint on ADMM for nonlinear matrix decompositions on <a href="https://arxiv.org/abs/2512.17473">arXiv</a>.</div></li>
+    </ul>
+  </div>
+</section>
+</main>
+
+<footer>
+  <span>© 2026 Atharva Awari</span>
+  <span>Figures on this page are computed from the models they illustrate.</span>
+</footer>
+
+<script>
+(() => {
+"use strict";
+const root = document.documentElement;
+const css = n => getComputedStyle(root).getPropertyValue(n).trim();
+const reduce = matchMedia("(prefers-reduced-motion: reduce)");
+
+/* ---------- theme ---------- */
+const themeBtn = document.getElementById("themeBtn");
+function isDark(){ const t = root.dataset.theme; return t ? t === "dark" : matchMedia("(prefers-color-scheme: dark)").matches; }
+function syncThemeBtn(){ themeBtn.textContent = isDark() ? "Light" : "Dark"; }
+try { const s = localStorage.getItem("theme"); if (s) root.dataset.theme = s; } catch(e){}
+syncThemeBtn();
+themeBtn.addEventListener("click", () => {
+  root.dataset.theme = isDark() ? "light" : "dark";
+  try { localStorage.setItem("theme", root.dataset.theme); } catch(e){}
+  syncThemeBtn(); readColors(); drawStatics(); if (!running) frame(lastT);
+});
+
+/* ---------- sticky bar border ---------- */
+const bar = document.getElementById("bar");
+addEventListener("scroll", () => bar.classList.toggle("scrolled", scrollY > 8), {passive:true});
+
+/* ---------- helpers ---------- */
+let C = {};
+function readColors(){ C = {pos:css("--pos"), neg:css("--neg"), ink:css("--ink"), muted:css("--muted"), rule:css("--rule"), paper:css("--paper")}; }
+readColors();
+function rng(seed){ return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function gauss(r){ let u = 0, v = 0; while(!u) u = r(); v = r(); return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v); }
+const relu = t => Math.max(0, t), sig = t => 1/(1+Math.exp(-t)), clip = t => Math.min(1, Math.max(0, t));
+const smooth = x => x <= 0 ? 0 : x >= 1 ? 1 : x*x*(3-2*x);
+const SVGNS = "http://www.w3.org/2000/svg";
+function el(tag, attrs, parent){ const e = document.createElementNS(SVGNS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; }
+
+/* ================= HERO ANIMATION ================= */
+const cv = document.getElementById("hero"), ctx = cv.getContext("2d");
+const m = 10, n = 13, p = 7, r = 3;
+const R = rng(7);
+const A = [...Array(m)].map(() => [...Array(r)].map(() => gauss(R)));
+const B = [...Array(n)].map(() => [...Array(r)].map(() => gauss(R)));
+const Cf = [...Array(p)].map((_, l) => [...Array(r)].map(() => l === 0 ? 1 : 0.35 + 0.9*R()));
+const theta = (i,j,l) => { let s = 0; for (let k = 0; k < r; k++) s += A[i][k]*B[j][k]*Cf[l][k]; return 0.62*s; };
+const TH = [...Array(p)].map((_, l) => [...Array(m)].map((_, i) => [...Array(n)].map((_, j) => theta(i,j,l))));
+const maxA = Math.max(...A.flat().map(Math.abs)), maxB = Math.max(...B.flat().map(Math.abs));
+
+const PH = [ // f, caption
+  {f: t => relu(t)/1.5, eq:'<i>X</i> ≈ max(0, <i>WH</i>)', what:'ReLU: sparse, nonnegative data'},
+  {f: t => sig(2.2*t),  eq:'<i>X</i> ≈ σ(<i>WH</i>)', what:'Sigmoid: binary and bounded data'},
+  {f: t => clip(t),     eq:'<i>X</i> ≈ min(1, max(0, <i>WH</i>))', what:'MinMax: clipped and saturated data'},
+  {f: t => clip(t),     eq:'𝒳 ≈ <i>f</i>(⟦<i>A</i>, <i>B</i>, <i>C</i>⟧)', what:'Nonlinear CPD: multiway data'}
+];
+const LOOP = 19;
+function state(t){
+  t = t % LOOP;
+  let a = 0, b = 0, s = 0, lift = 0, cap = 0;
+  if (t < 3.6)       { a=0; b=0; s=0; cap=0; }
+  else if (t < 4.6)  { a=0; b=1; s=smooth((t-3.6)/1); cap = s>.5?1:0; }
+  else if (t < 7.6)  { a=1; b=1; cap=1; }
+  else if (t < 8.6)  { a=1; b=2; s=smooth((t-7.6)/1); cap = s>.5?2:1; }
+  else if (t < 10.4) { a=2; b=2; cap=2; }
+  else if (t < 12.6) { a=2; b=2; lift=smooth((t-10.4)/2.2); cap = lift>.35?3:2; }
+  else if (t < 16.4) { a=2; b=2; lift=1; cap=3; }
+  else if (t < 18.4) { a=2; b=0; lift=1-smooth((t-16.4)/2); s=smooth((t-17.2)/1.2); cap = lift>.5?3:0; }
+  else               { a=0; b=0; cap=0; }
+  const sway = lift*Math.sin(Math.max(0,(t-12.6))*0.55)*0.12;
+  return {a,b,s,lift,cap,sway};
+}
+const fval = (st, th) => (1-st.s)*PH[st.a].f(th) + st.s*PH[st.b].f(th);
+
+// 3D projection
+function proj(x,y,z,st){
+  const psi = st.lift*0.62 + st.sway, phi = st.lift*0.42;
+  const cp = Math.cos(psi), sp = Math.sin(psi), cf = Math.cos(phi), sf = Math.sin(phi);
+  const x1 = x*cp + z*sp, z1 = -x*sp + z*cp;
+  const y1 = y*cf - z1*sf;
+  return [x1, y1];
+}
+const GAP = 1.5, INS = 0.09;
+let W = 700, H = 500, dpr = 1, SC = 20, OX = 0, OY = 0, FIT = [];
+function fitFor(lift){
+  let xs=[], ys=[];
+  const sw = lift ? [-.12,.12] : [0];
+  for (const sway of sw){
+    const st = {lift, sway};
+    const pts = lift
+      ? [[-r-0.6, 0, 0],[n, m+r+0.8, 0],[0, -0.2, 0],[n+0.6+r, -0.6, (p-1)*GAP+1],[n, 0, (p-1)*GAP],[0, 0, (p-1)*GAP],[n, m, (p-1)*GAP]]
+      : [[-r-1.6, -r-1.8, 0],[n, m, 0]];
+    for (const q of pts){ const [a,b] = proj(...q, st); xs.push(a); ys.push(b); }
+  }
+  const x0 = Math.min(...xs), x1 = Math.max(...xs), y0 = Math.min(...ys)-0.6, y1 = Math.max(...ys)+0.3;
+  const sc = Math.min((W*0.84)/(x1-x0), H/(y1-y0)) * 0.95;
+  return {sc, ox:(W*0.84 - (x1-x0)*sc)/2 - x0*sc, oy:(H - (y1-y0)*sc)/2 - y0*sc};
+}
+function layout(){
+  const rect = cv.getBoundingClientRect();
+  dpr = Math.min(2, devicePixelRatio || 1);
+  W = rect.width || 700; H = W*5/7;
+  cv.width = Math.round(W*dpr); cv.height = Math.round(H*dpr);
+  FIT = [fitFor(0), fitFor(1)];
+}
+function setFit(L){
+  const a = FIT[0], b = FIT[1];
+  SC = a.sc + (b.sc - a.sc)*L; OX = a.ox + (b.ox - a.ox)*L; OY = a.oy + (b.oy - a.oy)*L;
+}
+function quad(pts, fill, stroke){
+  ctx.beginPath();
+  pts.forEach(([x,y],k) => { const X = OX + x*SC, Y = OY + y*SC; k ? ctx.lineTo(X,Y) : ctx.moveTo(X,Y); });
+  ctx.closePath();
+  if (fill){ ctx.fillStyle = fill; ctx.fill(); }
+  if (stroke){ ctx.strokeStyle = stroke; ctx.stroke(); }
+}
+// cell in plane: kind 'xy' at z, 'xz' at y
+function cellXY(x,y,z,st){ return [[x+INS,y+INS],[x+1-INS,y+INS],[x+1-INS,y+1-INS],[x+INS,y+1-INS]].map(([a,b]) => proj(a,b,z,st)); }
+function cellXZ(x,y,z,st){ return [[x+INS,z+INS],[x+1-INS,z+INS],[x+1-INS,z+1-INS],[x+INS,z+1-INS]].map(([a,c]) => proj(a,y,c,st)); }
+function rgba(hex, a){ const h = hex.replace("#",""); const v = parseInt(h.length===3 ? h.split("").map(c=>c+c).join("") : h, 16); return `rgba(${v>>16&255},${v>>8&255},${v&255},${a.toFixed(3)})`; }
+function div(v, mx){ const a = Math.min(1, Math.abs(v)/mx); return rgba(v >= 0 ? C.pos : C.neg, 0.12 + 0.85*a); }
+
+function drawCurve(st, alpha){
+  // inset plot of f, top-right, in screen space
+  const w = Math.min(118, W*0.17), h = w*0.62, x0 = W - w - 4, y0 = 8;
+  ctx.save(); ctx.globalAlpha = alpha;
+  ctx.strokeStyle = C.rule; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(x0, y0+h*0.8); ctx.lineTo(x0+w, y0+h*0.8); ctx.moveTo(x0+w/2, y0); ctx.lineTo(x0+w/2, y0+h); ctx.stroke();
+  ctx.strokeStyle = C.pos; ctx.lineWidth = 2; ctx.beginPath();
+  for (let k = 0; k <= 60; k++){ const t = -2.2 + 4.4*k/60; const v = fval(st, t)*1.5/1.5; const X = x0 + w*k/60, Y = y0 + h*0.8 - Math.min(1.25, v)*h*0.62; k ? ctx.lineTo(X,Y) : ctx.moveTo(X,Y); }
+  ctx.stroke();
+  ctx.fillStyle = C.muted; ctx.font = `italic ${Math.max(12, w*0.12)}px "STIX Two Text", serif`;
+  ctx.fillText("f", x0 + 4, y0 + 12);
+  ctx.restore();
+}
+function drawLabel(txt, x, y, z, st, alpha, italic=true){
+  const [a,b] = proj(x,y,z,st);
+  ctx.save(); ctx.globalAlpha = alpha; ctx.fillStyle = C.muted;
+  ctx.font = `${italic?"italic ":""}${Math.max(13, SC*0.85)}px "STIX Two Text", serif`;
+  ctx.textAlign = "center"; ctx.textBaseline = "middle";
+  ctx.fillText(txt, OX + a*SC, OY + b*SC); ctx.restore();
+}
+function frame(t){
+  const st = state(t);
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  ctx.clearRect(0,0,W,H);
+  ctx.lineWidth = 1;
+  const L = st.lift;
+  setFit(L);
+  // C along depth (behind everything)
+  const deep = smooth((L-0.4)/0.6), flat = 1 - smooth(L*1.8);
+  if (L > 0.02){
+    ctx.globalAlpha = deep;
+    for (let l = p-1; l >= 0; l--) for (let k = 0; k < r; k++) quad(cellXZ(n+0.6+k, -0.6, l*GAP, st), div(Cf[l][k]-0.9, 0.9));
+    ctx.globalAlpha = 1;
+  }
+  // slices back-to-front, each an opaque sheet so the stack reads as layers
+  const nSl = 1 + (p-1)*L;
+  for (let l = p-1; l >= 0; l--){
+    const vis = Math.max(0, Math.min(1, nSl - l));
+    if (vis <= 0) continue;
+    const z = l*GAP*L;
+    ctx.globalAlpha = vis;
+    const sheet = [[-0.08,-0.08],[n+0.08,-0.08],[n+0.08,m+0.08],[-0.08,m+0.08]].map(([a,b]) => proj(a,b,z,st));
+    quad(sheet, C.paper, l ? C.rule : null);
+    for (let i = 0; i < m; i++) for (let j = 0; j < n; j++){
+      const v = fval(st, TH[l][i][j]);
+      const pts = cellXY(j, i, z, st);
+      if (v > 0.015) quad(pts, rgba(C.pos, 0.1 + 0.88*Math.min(1, v)));
+      else quad(pts, null, C.rule);
+    }
+    ctx.globalAlpha = 1;
+  }
+  // factors: W/A on the left; H on top (matrix), B below (tensor)
+  for (let i = 0; i < m; i++) for (let k = 0; k < r; k++) quad(cellXY(-r-0.6+k, i, 0, st), div(A[i][k], maxA));
+  if (flat > 0.01){ ctx.globalAlpha = flat; for (let k = 0; k < r; k++) for (let j = 0; j < n; j++) quad(cellXY(j, -r-0.6+k, 0, st), div(B[j][k], maxB)); }
+  if (deep > 0.01){ ctx.globalAlpha = deep; for (let k = 0; k < r; k++) for (let j = 0; j < n; j++) quad(cellXY(j, m+0.6+k, 0, st), div(B[j][k], maxB)); }
+  ctx.globalAlpha = 1;
+  drawLabel("W", -r/2-0.6, -0.9, 0, st, flat);
+  drawLabel("H", -1.1, -r/2-0.6, 0, st, flat);
+  drawLabel("A", -r-1.6, m/2, 0, st, deep);
+  drawLabel("B", -1.1, m+0.6+r/2, 0, st, deep);
+  drawLabel("C", n+0.6+r/2, -1.7, (p-1)*GAP+0.6, st, deep);
+  drawCurve(st, 1);
+  setCaption(st.cap);
+}
+const capEq = document.getElementById("capEq"), capWhat = document.getElementById("capWhat");
+let capNow = -1, capTimer = 0;
+function setCaption(k){
+  if (k === capNow) return; capNow = k;
+  capEq.style.opacity = capWhat.style.opacity = 0;
+  clearTimeout(capTimer);
+  capTimer = setTimeout(() => { capEq.innerHTML = PH[k].eq; capWhat.textContent = PH[k].what; capEq.style.opacity = capWhat.style.opacity = 1; }, reduce.matches ? 0 : 220);
+}
+let running = false, visible = true, userPaused = false, t0 = performance.now(), lastT = 0, raf = 0;
+function loop(now){ lastT = (now - t0)/1000; frame(lastT); if (running) raf = requestAnimationFrame(loop); }
+function start(){ if (running || userPaused || reduce.matches || !visible || document.hidden) return; running = true; t0 = performance.now() - lastT*1000; raf = requestAnimationFrame(loop); }
+function stop(){ running = false; cancelAnimationFrame(raf); }
+const pauseBtn = document.getElementById("pauseBtn");
+pauseBtn.addEventListener("click", () => {
+  userPaused = !userPaused; pauseBtn.textContent = userPaused ? "Play" : "Pause";
+  userPaused ? stop() : start();
+});
+new IntersectionObserver(es => { visible = es[0].isIntersecting; visible ? start() : stop(); }).observe(cv);
+document.addEventListener("visibilitychange", () => document.hidden ? stop() : start());
+function applyMotionPref(){
+  if (reduce.matches){ stop(); pauseBtn.hidden = true; lastT = 1.0; frame(lastT); }
+  else { pauseBtn.hidden = false; start(); }
+}
+reduce.addEventListener?.("change", applyMotionPref);
+addEventListener("resize", () => { layout(); frame(lastT); });
+document.fonts?.ready.then(() => { layout(); frame(lastT); });
+layout(); frame(0); applyMotionPref();
+
+/* ================= STATIC FIGURES ================= */
+function grid(svg, M, x0, y0, s, colorFn){
+  const g = el("g", {}, svg);
+  M.forEach((row,i) => row.forEach((v,j) => {
+    const c = colorFn(v);
+    if (c) el("rect", {x:x0+j*s+0.6, y:y0+i*s+0.6, width:s-1.2, height:s-1.2, rx:0.6, fill:c}, g);
+    else el("rect", {x:x0+j*s+0.9, y:y0+i*s+0.9, width:s-1.8, height:s-1.8, rx:0.6, fill:"none", stroke:C.rule, "stroke-width":0.6}, g);
+  }));
+  return g;
+}
+function text(svg, x, y, s, opts={}){ const t = el("text", {x, y, "text-anchor":opts.anchor||"middle", "font-family":"STIX Two Text, serif", "font-size":opts.size||11, fill:opts.fill||C.muted, "font-style":opts.italic?"italic":"normal"}, svg); t.textContent = s; return t; }
+function clear(svg){ while (svg.firstChild) svg.removeChild(svg.firstChild); }
+
+function drawRelu(){
+  const svg = document.getElementById("vizRelu"); clear(svg);
+  const N = 8, c = (1 + Math.cos(2*Math.PI/N))/2;
+  const Th = [...Array(N)].map((_,i) => [...Array(N)].map((_,j) => Math.cos(2*Math.PI*(i-j)/N) - c));
+  const mx = Math.max(...Th.flat().map(Math.abs));
+  const s = 11.5, y0 = 18;
+  grid(svg, Th, 4, y0, s, v => v >= 0 ? rgba(C.pos, 1) : rgba(C.neg, 0.15 + 0.85*Math.min(1, -v/mx)));
+  grid(svg, Th.map(r => r.map(relu)), 144, y0, s, v => v > 1e-9 ? rgba(C.pos, 1) : null);
+  text(svg, 4+N*s/2, 12, "rank 3");
+  text(svg, 144+N*s/2, 12, "rank 8");
+  const ax = 4+N*s+6, bx = 144-6, ym = y0+N*s/2;
+  el("path", {d:`M${ax} ${ym} L${bx-3} ${ym} M${bx-8} ${ym-4} L${bx-3} ${ym} L${bx-8} ${ym+4}`, stroke:C.muted, fill:"none", "stroke-width":1}, svg);
+  text(svg, (ax+bx)/2, ym-6, "max(0, ·)", {size:10.5});
+}
+function drawSig(){
+  const svg = document.getElementById("vizSig"); clear(svg);
+  const rr = rng(11), M = 9, N = 9;
+  const Wm = [...Array(M)].map(() => [gauss(rr), gauss(rr)]), Hm = [...Array(N)].map(() => [gauss(rr), gauss(rr)]);
+  const P = Wm.map(w => Hm.map(h => w[0]*h[0] + w[1]*h[1]));
+  const X = P.map(r => r.map(v => v > 0 ? 1 : 0));
+  const S = P.map(r => r.map(v => sig(3.2*v)));
+  const s = 10.2, y0 = 18;
+  grid(svg, X, 4, y0, s, v => v ? rgba(C.pos, 1) : null);
+  grid(svg, S, 144, y0, s, v => v > 0.03 ? rgba(C.pos, Math.min(1, v)) : null);
+  text(svg, 4+N*s/2, 12, "binary");
+  text(svg, 144+N*s/2, 12, "rank 2", {});
+  // sigmoid glyph between
+  const gx = 4+N*s+10, gw = 144-10-gx, gy = y0+N*s/2+12, gh = 24;
+  let d = ""; for (let k = 0; k <= 30; k++){ const t = -4 + 8*k/30; d += (k?"L":"M") + (gx + gw*k/30).toFixed(1) + " " + (gy - gh*sig(1.6*t)).toFixed(1); }
+  el("path", {d, stroke:C.pos, fill:"none", "stroke-width":1.6}, svg);
+  el("path", {d:`M${gx} ${gy} L${gx+gw} ${gy}`, stroke:C.rule, "stroke-width":1}, svg);
+  text(svg, gx+gw/2, gy-gh-6, "σ", {italic:false, size:12});
+}
+const conv = {
+  t:[0.05,0.25,0.5,0.75,1,1.21,1.26,1.31,1.36,1.41,1.56,2.36,2.41,2.46,2.51,2.81,3.42,3.52,3.62,3.77,4.02,4.52,4.67,4.92,5.23,5.73,5.93,6.03,6.48,6.83,6.98,7.24,7.59,7.89,8.09,8.39,8.64,8.74,8.84,8.94,9.0,9.25,9.55,9.75,9.85,9.95,10],
+  cd:[0.976,0.976,0.976,0.976,0.976,0.976,0.949,0.807,0.753,0.724,0.696,0.696,0.608,0.521,0.499,0.479,0.470,0.452,0.414,0.394,0.384,0.380,0.362,0.344,0.339,0.331,0.318,0.315,0.312,0.301,0.297,0.295,0.293,0.285,0.284,0.282,0.279,0.278,0.277,0.275,0.273,0.272,0.271,0.268,0.267,0.266,0.264],
+  admm:[0.976,0.314,0.278,0.262,0.250,0.243,0.242,0.241,0.239,0.238,0.234,0.222,0.221,0.220,0.220,0.217,0.211,0.210,0.210,0.209,0.207,0.204,0.203,0.201,0.200,0.198,0.197,0.197,0.195,0.194,0.194,0.193,0.192,0.191,0.191,0.190,0.189,0.189,0.189,0.188,0.188,0.188,0.187,0.187,0.187,0.187,0.187]
+};
+function drawConv(){
+  const svg = document.getElementById("vizConv"); clear(svg);
+  const x0 = 26, x1 = 232, y0 = 10, y1 = 100;
+  const X = t => x0 + (x1-x0)*t/10, lo = Math.log(0.15), hi = Math.log(1.05);
+  const Y = v => y1 - (y1-y0)*(Math.log(v)-lo)/(hi-lo);
+  el("path", {d:`M${x0} ${y0} L${x0} ${y1} L${x1} ${y1}`, stroke:C.rule, fill:"none", "stroke-width":1}, svg);
+  [0.2, 0.5, 1].forEach(v => text(svg, x0-4, Y(v)+3.5, String(v), {anchor:"end", size:9}));
+  [0, 5, 10].forEach(t => text(svg, X(t), y1+11, t + (t===10?" s":""), {size:9}));
+  const path = arr => arr.map((v,k) => (k?"L":"M") + X(conv.t[k]).toFixed(1) + " " + Y(v).toFixed(1)).join("");
+  el("path", {d:path(conv.cd), stroke:C.neg, fill:"none", "stroke-width":1.6}, svg);
+  el("path", {d:path(conv.admm), stroke:C.pos, fill:"none", "stroke-width":2}, svg);
+  text(svg, X(3.1), Y(0.62), "coordinate descent", {anchor:"start", size:10, fill:C.neg});
+  text(svg, X(10), Y(0.187)-6, "ADMM", {anchor:"end", size:10, fill:C.pos});
+}
+function drawCens(){
+  const svg = document.getElementById("vizCens"); clear(svg);
+  const x0 = 6, x1 = 234, base = 82, lod = 62;
+  const peaks = [[0.08,12,0.03],[0.2,48,0.035],[0.33,15,0.04],[0.46,38,0.03],[0.57,9,0.03],[0.68,58,0.035],[0.8,16,0.03],[0.9,30,0.028]];
+  const yv = u => peaks.reduce((s,[c,h,w]) => s + h*Math.exp(-((u-c)**2)/(2*w*w)), 2);
+  let full = "", obs = "";
+  for (let k = 0; k <= 240; k++){ const u = k/240, y = base - yv(u), X = (x0 + (x1-x0)*u).toFixed(1);
+    full += (k?"L":"M") + X + " " + y.toFixed(1); obs += (k?"L":"M") + X + " " + Math.min(y, lod).toFixed(1); }
+  el("path", {d:full, stroke:C.rule, fill:"none", "stroke-width":1.2, "stroke-dasharray":"2 2"}, svg);
+  el("path", {d:obs, stroke:C.pos, fill:"none", "stroke-width":1.6}, svg);
+  el("path", {d:`M${x0} ${lod} L${x1} ${lod}`, stroke:C.neg, "stroke-width":1, "stroke-dasharray":"5 3"}, svg);
+  el("path", {d:`M${x1-96} ${base+11} L${x1-80} ${base+11}`, stroke:C.neg, "stroke-width":1, "stroke-dasharray":"5 3"}, svg);
+  text(svg, x1, base+14.5, "limit of detection", {anchor:"end", size:9.5, fill:C.neg});
+  el("path", {d:`M${x0} ${base} L${x1} ${base}`, stroke:C.rule, "stroke-width":1}, svg);
+}
+function drawStatics(){ drawRelu(); drawSig(); drawConv(); drawCens(); }
+drawStatics();
+matchMedia("(prefers-color-scheme: dark)").addEventListener?.("change", () => { readColors(); drawStatics(); frame(lastT); });
+})();
+</script>
+</body>
