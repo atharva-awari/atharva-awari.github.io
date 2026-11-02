@@ -146,7 +146,7 @@ sub,sup{line-height:0; font-size:.72em}
 .soft li{max-width:24rem}
 .soft a.n{font-weight:600; color:var(--ink); text-decoration:none; font-size:1.06rem}
 .soft a.n:hover{text-decoration:underline}
-.soft .lang{font-family:var(--sans); font-size:.75rem; color:var(--muted); margin-left:.4rem}
+.soft .lang{display:block; font-family:var(--sans); font-size:.75rem; color:var(--muted); margin-top:.1rem}
 .soft p{margin:.2rem 0 0; font-size:1rem; line-height:1.5}
 
 /* talks & news */
@@ -195,7 +195,7 @@ footer a{color:var(--muted)}
     <p>Classical factorizations write data as <span class="math"><i>X</i> ≈ <i>WH</i></span>. My work studies the nonlinear version <span class="math"><i>X</i> ≈ <i>f</i>(<i>WH</i>)</span>, and its tensor counterpart, which describes sparse, binary, bounded or clipped data with far fewer factors. I build these models into a single ADMM framework and release the code openly.</p>
     <div class="links">
       <a class="primary" href="assets/cv.pdf">Download CV</a>
-      <a href="https://gitlab.com/Atharva05">GitLab</a>
+      <a href="https://github.com/atharva-awari">GitHub</a>
       <a href="https://scholar.google.com/citations?user=RZN9jL8AAAAJ&amp;hl=en">Google Scholar</a>
       <a href="https://www.linkedin.com/in/atharva-awari">LinkedIn</a>
       <!-- Add when ready:
@@ -301,12 +301,11 @@ footer a{color:var(--muted)}
           <div class="acts">
             <a href="https://arxiv.org/abs/2610.05339">arXiv</a>
             <a href="https://github.com/atharva-awari/ADMM-for-Nonlinear-CP">Code</a>
-            <details><summary>Cite</summary><pre>@article{awari2026nonlinearcp,
-  title   = {Nonlinear Tensor Decomposition for Pattern Discovery},
-  author  = {Awari, Atharva and van der Ploeg, G. R. and Vandaele, Arnaud and
-             Gillis, Nicolas and Acar, Evrim},
-  journal = {arXiv preprint arXiv:2610.05339},
-  year    = {2026}
+            <details><summary>Cite</summary><pre>@article{awari2026nonlinear,
+  title={Nonlinear Tensor Decomposition for Pattern Discovery},
+  author={Awari, Atharva and van der Ploeg, Geert Roelof and Vandaele, Arnaud and Gillis, Nicolas and Acar, Evrim},
+  journal={arXiv preprint arXiv:2610.05339},
+  year={2026}
 }</pre></details>
           </div>
         </li>
@@ -317,12 +316,11 @@ footer a{color:var(--muted)}
           <div class="acts">
             <a href="https://arxiv.org/abs/2512.17473">arXiv</a>
             <a href="https://gitlab.com/Atharva05/admm-for-nmd">Code</a>
-            <details><summary>Cite</summary><pre>@article{awari2025admm,
-  title   = {Alternating Direction Method of Multipliers for
-             Nonlinear Matrix Decompositions},
-  author  = {Awari, Atharva and Gillis, Nicolas and Vandaele, Arnaud},
-  journal = {arXiv preprint arXiv:2512.17473},
-  year    = {2025}
+            <details><summary>Cite</summary><pre>@article{awari2025alternating,
+  title={Alternating direction method of multipliers for nonlinear matrix decompositions},
+  author={Awari, Atharva and Gillis, Nicolas and Vandaele, Arnaud},
+  journal={arXiv preprint arXiv:2512.17473},
+  year={2025}
 }</pre></details>
           </div>
         </li>
@@ -339,13 +337,11 @@ footer a{color:var(--muted)}
           <div class="acts">
             <a href="https://www.researchgate.net/publication/405203491_A_Simple_and_Flexible_ADMM-Based_Framework_for_Tensor_Decompositions">Preprint</a>
             <a href="https://gitlab.com/Atharva05/admm-tensors">Code</a>
-            <details><summary>Cite</summary><pre>@inproceedings{awari2026admmcpd,
-  title     = {A Simple and Flexible {ADMM}-Based Framework
-               for Tensor Decompositions},
-  author    = {Awari, Atharva and Saha, Subhayan and
-               Gillis, Nicolas and Vandaele, Arnaud},
-  booktitle = {European Signal Processing Conference (EUSIPCO)},
-  year      = {2026}
+            <details><summary>Cite</summary><pre>@inproceedings{awarisimple,
+  title={A Simple and Flexible ADMM-Based Framework for Tensor Decompositions},
+  author={Awari, Atharva and Saha, Subhayan and Gillis, Nicolas and Vandaele, Arnaud},
+  booktitle={European Signal Processing Conference (EUSIPCO)},
+  year={2026}
 }</pre></details>
           </div>
         </li>
@@ -356,13 +352,13 @@ footer a{color:var(--muted)}
           <div class="acts">
             <a href="https://ieeexplore.ieee.org/document/11204338">Paper</a>
             <a href="https://github.com/Harri-N/sigma-NMD">Code</a>
-            <details><summary>Cite</summary><pre>@inproceedings{nguyen2025sigmoid,
-  title     = {Nonlinear Matrix Decomposition with the Sigmoid Function},
-  author    = {Nguyen, Harrison and Awari, Atharva and
-               Vandaele, Arnaud and Gillis, Nicolas},
-  booktitle = {IEEE International Workshop on Machine Learning
-               for Signal Processing (MLSP)},
-  year      = {2025}
+            <details><summary>Cite</summary><pre>@inproceedings{nguyen2025nonlinear,
+  title={Nonlinear matrix decomposition with the sigmoid function},
+  author={Nguyen, Harrison and Awari, Atharva and Vandaele, Arnaud and Gillis, Nicolas},
+  booktitle={2025 IEEE 35th International Workshop on Machine Learning for Signal Processing (MLSP)},
+  pages={1--6},
+  year={2025},
+  organization={IEEE}
 }</pre></details>
           </div>
         </li>
@@ -374,12 +370,12 @@ footer a{color:var(--muted)}
             <a href="https://ieeexplore.ieee.org/document/10715025">Paper</a>
             <a href="https://gitlab.com/Atharva05/coordinate-descent-for-relu-nmd">Code</a>
             <details><summary>Cite</summary><pre>@inproceedings{awari2024coordinate,
-  title     = {Coordinate Descent Algorithm for Nonlinear Matrix
-               Decomposition with the {ReLU} Function},
-  author    = {Awari, Atharva and Nguyen, Harrison and Wertz, Samuel and
-               Vandaele, Arnaud and Gillis, Nicolas},
-  booktitle = {European Signal Processing Conference (EUSIPCO)},
-  year      = {2024}
+  title={Coordinate descent algorithm for nonlinear matrix decomposition with the ReLU function},
+  author={Awari, Atharva and Nguyen, Harrison and Wertz, Samuel and Vandaele, Arnaud and Gillis, Nicolas},
+  booktitle={2024 32nd European Signal Processing Conference (EUSIPCO)},
+  pages={2622--2626},
+  year={2024},
+  organization={IEEE}
 }</pre></details>
           </div>
         </li>
@@ -392,13 +388,12 @@ footer a{color:var(--muted)}
             <a href="https://arxiv.org/abs/2305.08687">arXiv</a>
             <a href="https://gitlab.com/ngillis/ReLU-NMD">Code</a>
             <details><summary>Cite</summary><pre>@inproceedings{seraghiti2023accelerated,
-  title     = {Accelerated Algorithms for Nonlinear Matrix Decomposition
-               with the {ReLU} Function},
-  author    = {Seraghiti, Giovanni and Awari, Atharva and Vandaele, Arnaud and
-               Porcelli, Margherita and Gillis, Nicolas},
-  booktitle = {IEEE International Workshop on Machine Learning
-               for Signal Processing (MLSP)},
-  year      = {2023}
+  title={Accelerated algorithms for nonlinear matrix decomposition with the ReLU function},
+  author={Seraghiti, Giovanni and Awari, Atharva and Vandaele, Arnaud and Porcelli, Margherita and Gillis, Nicolas},
+  booktitle={2023 IEEE 33rd International Workshop on Machine Learning for Signal Processing (MLSP)},
+  pages={1--6},
+  year={2023},
+  organization={IEEE}
 }</pre></details>
           </div>
         </li>
@@ -423,17 +418,17 @@ footer a{color:var(--muted)}
   <h2 id="h-soft">Software<small>Code for every paper, with the experiments</small></h2>
   <div class="body">
     <ul class="soft">
-      <li><a class="n" href="https://github.com/atharva-awari/ADMM-for-Nonlinear-CP">ADMM-for-Nonlinear-CP</a>
+      <li><a class="n" href="https://github.com/atharva-awari/ADMM-for-Nonlinear-CP">ADMM for Nonlinear CP Decompositions</a>
         <p>ADMM for nonlinear CP decompositions, where an element-wise nonlinearity models clipped or censored data, such as values below a limit of detection in metabolomics or saturated audio recordings.</p></li>
-      <li><a class="n" href="https://gitlab.com/Atharva05/admm-for-nmd">admm-for-nmd</a><span class="lang">MATLAB</span>
+      <li><a class="n" href="https://gitlab.com/Atharva05/admm-for-nmd">ADMM for NMDs</a><span class="lang">MATLAB</span>
         <p>ADMM for twelve nonlinear matrix decompositions (ReLU, square, MinMax, modulus with Frobenius, ℓ<sub>1</sub> or KL), with missing data and an adaptive penalty.</p></li>
-      <li><a class="n" href="https://gitlab.com/Atharva05/admm-tensors">admm-tensors</a><span class="lang">Python</span>
+      <li><a class="n" href="https://gitlab.com/Atharva05/admm-tensors">ADMM for Generalized Tensor Decompositions</a><span class="lang">Python</span>
         <p>Global ADMM for the canonical polyadic decomposition under Frobenius, ℓ<sub>1</sub> and KL losses, with the AO-ADMM comparison.</p></li>
-      <li><a class="n" href="https://gitlab.com/Atharva05/coordinate-descent-for-relu-nmd">coordinate-descent-for-relu-nmd</a><span class="lang">MATLAB, Julia, C++</span>
+      <li><a class="n" href="https://gitlab.com/Atharva05/coordinate-descent-for-relu-nmd">Coordinate Descent for ReLU-NMD</a><span class="lang">MATLAB, Julia, C++</span>
         <p>Exact coordinate descent for ReLU-NMD, solving each scalar subproblem by sweeping its breakpoints; multithreaded.</p></li>
-      <li><a class="n" href="https://gitlab.com/ngillis/ReLU-NMD">ReLU-NMD</a><span class="lang">MATLAB</span>
+      <li><a class="n" href="https://gitlab.com/ngillis/ReLU-NMD">Accelerated ReLU-NMD</a><span class="lang">MATLAB</span>
         <p>A-NMD and 3B-NMD with nuclear-norm initialization, with N. Gillis and G. Seraghiti.</p></li>
-      <li><a class="n" href="https://github.com/Harri-N/sigma-NMD">sigma-NMD</a><span class="lang">Python</span>
+      <li><a class="n" href="https://github.com/Harri-N/sigma-NMD">Sigmoid NMD</a><span class="lang">Python</span>
         <p>Block coordinate descent for the sigmoid decomposition, with H. Nguyen.</p></li>
     </ul>
   </div>
