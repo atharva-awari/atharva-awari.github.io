@@ -254,7 +254,7 @@ footer a{color:var(--muted)}
         <p class="model math">min<sub><i>W</i>,<i>H</i></sub> <i>d</i>(<i>X</i>, <i>f</i>(<i>WH</i>))</p>
         <p>Splitting <span class="math"><i>T</i> = <i>WH</i></span> gives an ADMM scheme in which only one entrywise update depends on the nonlinearity <i>f</i> and the loss <i>d</i>. Four nonlinearities (ReLU, square, MinMax, modulus) and three losses (Frobenius, ℓ<sub>1</sub>, Kullback–Leibler) give twelve models, with missing data handled for free.</p>
         <p>Matching the loss to the noise matters: under Poisson noise, MinMax with the KL divergence recovers the image with 9.9% error, against 19.9% for the Frobenius norm. For ReLU-NMD the same framework beats coordinate descent and a tuned Adam baseline.</p>
-        <p class="refs">Under review, <a href="https://arxiv.org/abs/2512.17473">arXiv:2512.17473</a></p>
+        <p class="refs">Signal Processing (Elsevier), 2026, <a href="https://arxiv.org/abs/2512.17473">arXiv:2512.17473</a></p>
       </div>
       <figure class="viz">
         <div class="strip two">
@@ -307,6 +307,29 @@ footer a{color:var(--muted)}
   <div class="body">
 
     <div class="pubgroup">
+      <h3>Journal papers</h3>
+      <ul class="pubs">
+        <li>
+          <span class="t"><a href="https://arxiv.org/abs/2512.17473">Alternating direction method of multipliers for nonlinear matrix decompositions</a></span>
+          <span class="a"><b>A. Awari</b>, N. Gillis, A. Vandaele</span>
+          <span class="v">Signal Processing (Elsevier), 2026, accepted</span>
+          <div class="acts">
+            <a href="https://arxiv.org/abs/2512.17473">arXiv</a>
+            <a href="https://github.com/atharva-awari/ADMM-for-NMDs">Code</a>
+            <details><summary>Cite</summary><pre>@article{awari2025alternating,
+  title={Alternating direction method of multipliers for nonlinear matrix decompositions},
+  author={Awari, Atharva and Gillis, Nicolas and Vandaele, Arnaud},
+  journal={Signal Processing},
+  publisher={Elsevier},
+  year={2026},
+  note={Accepted for publication; arXiv:2512.17473}
+}</pre></details>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="pubgroup">
       <h3>Under review</h3>
       <ul class="pubs">
         <li>
@@ -321,21 +344,6 @@ footer a{color:var(--muted)}
   author={Awari, Atharva and van der Ploeg, Geert Roelof and Vandaele, Arnaud and Gillis, Nicolas and Acar, Evrim},
   journal={arXiv preprint arXiv:2610.05339},
   year={2026}
-}</pre></details>
-          </div>
-        </li>
-        <li>
-          <span class="t"><a href="https://arxiv.org/abs/2512.17473">Alternating direction method of multipliers for nonlinear matrix decompositions</a></span>
-          <span class="a"><b>A. Awari</b>, N. Gillis, A. Vandaele</span>
-          <span class="v">Submitted to Signal Processing (Elsevier)</span>
-          <div class="acts">
-            <a href="https://arxiv.org/abs/2512.17473">arXiv</a>
-            <a href="https://github.com/atharva-awari/ADMM-for-NMDs">Code</a>
-            <details><summary>Cite</summary><pre>@article{awari2025alternating,
-  title={Alternating direction method of multipliers for nonlinear matrix decompositions},
-  author={Awari, Atharva and Gillis, Nicolas and Vandaele, Arnaud},
-  journal={arXiv preprint arXiv:2512.17473},
-  year={2025}
 }</pre></details>
           </div>
         </li>
@@ -472,6 +480,7 @@ footer a{color:var(--muted)}
     <ul class="list">
       <li><time datetime="2027-01">Jan 2027</time><div><span class="cell up" aria-hidden="true"></span>Starting as a postdoctoral researcher in Evrim Acar's group at SimulaMet, Oslo.</div></li>
       <li><time datetime="2026-12-04">4 Dec 2026</time><div><span class="cell up" aria-hidden="true"></span>Public PhD defence at the University of Mons.</div></li>
+      <li><time datetime="2026-11">Nov 2026</time><div><span class="cell" aria-hidden="true"></span><i>Alternating direction method of multipliers for nonlinear matrix decompositions</i> accepted in Signal Processing (Elsevier).</div></li>
       <li><time datetime="2026-10-29">29 Oct 2026</time><div><span class="cell" aria-hidden="true"></span>Passed my private PhD defence at the University of Mons.</div></li>
       <li><time datetime="2026-10">Oct 2026</time><div><span class="cell" aria-hidden="true"></span><i>Nonlinear tensor decomposition for pattern discovery</i>, with SimulaMet, submitted to ICASSP 2027 (<a href="https://arxiv.org/abs/2610.05339">arXiv</a>).</div></li>
       <li><time datetime="2026-09">Sep 2026</time><div><span class="cell" aria-hidden="true"></span>PhD thesis <i>Beyond Linearity: Nonlinear Matrix and Tensor Decompositions</i> submitted.</div></li>
