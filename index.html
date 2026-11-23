@@ -132,13 +132,13 @@ sub,sup{line-height:0; font-size:.72em}
 .pubs .a{display:block; font-size:1rem; line-height:1.45}
 .pubs .a b{font-weight:600}
 .pubs .v{display:block; font-style:italic; color:var(--muted); font-size:1rem}
-.acts{display:flex; flex-wrap:wrap; gap:.4rem; margin-top:.35rem; font-family:var(--sans); font-size:.75rem; align-items:flex-start}
-.acts a,.acts summary{color:var(--muted); border:1px solid var(--rule); border-radius:4px; padding:.12rem .5rem; text-decoration:none; cursor:pointer; list-style:none}
+.acts{margin-top:.35rem; font-family:var(--sans); font-size:.75rem; line-height:1.9}
+.acts a,.acts summary{display:inline-block; margin-right:.4rem; line-height:1.5; color:var(--muted); border:1px solid var(--rule); border-radius:4px; padding:.12rem .5rem; text-decoration:none; cursor:pointer; list-style:none}
 .acts a:hover,.acts summary:hover{color:var(--ink); border-color:var(--muted)}
 .acts summary::-webkit-details-marker{display:none}
-.acts details{display:contents}
+.acts details{display:inline}
 .acts details[open] summary{color:var(--ink); border-color:var(--ink)}
-.acts pre{flex-basis:100%; margin:.4rem 0 0; padding:.8rem 1rem; background:var(--paper-2); border-radius:4px; font-size:.78rem; line-height:1.5; overflow-x:auto; white-space:pre; font-family:ui-monospace, "SF Mono", Menlo, Consolas, monospace; color:var(--ink)}
+.acts pre{display:block; width:100%; margin:.4rem 0 0; padding:.8rem 1rem; background:var(--paper-2); border-radius:4px; font-size:.78rem; line-height:1.5; overflow-x:auto; white-space:pre; font-family:ui-monospace, "SF Mono", Menlo, Consolas, monospace; color:var(--ink)}
 .tag{font-family:var(--sans); font-size:.72rem; font-style:normal; color:var(--pos); border:1px solid currentColor; border-radius:4px; padding:0 .35rem; margin-left:.35rem; vertical-align:.12em}
 
 /* software */
@@ -218,7 +218,7 @@ footer a{color:var(--muted)}
 
 <!-- ================= RESEARCH ================= -->
 <section class="sec" id="research" aria-labelledby="h-research">
-  <h2 id="h-research">Research<small>From my thesis, <i>Beyond Linearity: Nonlinear Matrix and Tensor Decompositions</i></small></h2>
+  <h2 id="h-research">Research<small>From my thesis, <a href="assets/thesis.pdf"><i>Beyond Linearity: Nonlinear Matrix and Tensor Decompositions</i></a></small></h2>
   <div class="body">
 
     <article class="topic">
@@ -305,6 +305,26 @@ footer a{color:var(--muted)}
 <section class="sec" id="publications" aria-labelledby="h-pubs">
   <h2 id="h-pubs">Publications</h2>
   <div class="body">
+
+    <div class="pubgroup">
+      <h3>PhD thesis</h3>
+      <ul class="pubs">
+        <li>
+          <span class="t"><a href="assets/thesis.pdf">Beyond Linearity: Nonlinear Matrix and Tensor Decompositions</a></span>
+          <span class="a"><b>A. Awari</b>, supervised by N. Gillis and A. Vandaele</span>
+          <span class="v">PhD thesis, University of Mons, 2026</span>
+          <div class="acts">
+            <a href="assets/thesis.pdf">PDF</a>
+            <details><summary>Cite</summary><pre>@phdthesis{awari2026beyond,
+  title={Beyond Linearity: Nonlinear Matrix and Tensor Decompositions},
+  author={Awari, Atharva},
+  school={University of Mons},
+  year={2026}
+}</pre></details>
+          </div>
+        </li>
+      </ul>
+    </div>
 
     <div class="pubgroup">
       <h3>Journal papers</h3>
@@ -423,16 +443,6 @@ footer a{color:var(--muted)}
       </ul>
     </div>
 
-    <div class="pubgroup">
-      <h3>Thesis</h3>
-      <ul class="pubs">
-        <li>
-          <span class="t">Beyond linearity: nonlinear matrix and tensor decompositions</span>
-          <span class="a"><b>A. Awari</b>, supervised by N. Gillis and A. Vandaele</span>
-          <span class="v">PhD thesis, University of Mons, 2026</span>
-        </li>
-      </ul>
-    </div>
   </div>
 </section>
 
